@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchTodos } from "@/redux/slice/todos";
+
+import { useFetchTodosQuery } from "@/redux/slice/api";
 import {
   Card,
   CardContent,
@@ -11,22 +11,18 @@ import {
 } from "@/components/ui/card";
 
 const Dashboard = () => {
-  const dispatch = useDispatch();
-  const state = useSelector((state) => state);
+  const { isLoading, data, isError } = useFetchTodosQuery();
 
-  useEffect(() => {
-    dispatch(fetchTodos());
-  }, []);
-
-  console.log("State", state);
-
-  if (state.todo.isLoading) {
+  if (isLoading) {
     return <h1>Loading...</h1>;
+  }
+  if (isError) {
+    console.log("Error fetching Todos");
   }
 
   return (
     <div className="p-10">
-      {state.todo.data?.map((data) => (
+      {data?.map((data) => (
         <Card className="mt-3">
           <CardHeader>
             <CardTitle>{data.id}</CardTitle>

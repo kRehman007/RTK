@@ -1,8 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import todoReducer from "./slice/todos";
+import { TodoAPI } from "./slice/api";
 
 export const store = configureStore({
   reducer: {
-    todo: todoReducer,
+    [TodoAPI.reducerPath]: TodoAPI.reducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(TodoAPI.middleware), // Add middleware for caching and invalidation
 });
